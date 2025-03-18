@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://c2wnx8tq2jag" path="res://assets/bg.png" id="2_0xm2m"]
 [ext_resource type="PackedScene" uid="uid://dh2d8ofpnq3cr" path="res://snake/snake_segment.tscn" id="2_h2yge"]
 
-[node name="Main" type="Node2D"]
+[node name="Main" type="Node" groups=["segments"]]
 script = ExtResource("1_ig7tw")
 snake_scene = ExtResource("2_h2yge")
 
@@ -12,3 +12,8 @@ snake_scene = ExtResource("2_h2yge")
 position = Vector2(0, 50)
 texture = ExtResource("2_0xm2m")
 centered = false
+
+[node name="MoveTimer" type="Timer" parent="."]
+wait_time = 0.1
+
+[connection signal="timeout" from="MoveTimer" to="." method="_on_move_timer_timeout"]
