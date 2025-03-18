@@ -1,7 +1,9 @@
 extends Node
 
 @export var snake_scene : PackedScene
+
 @onready var hud: Hud = $Hud
+@onready var game_over_menu: CanvasLayer = $GameOverMenu
 
 var game_started := false
 
@@ -30,6 +32,9 @@ func _process(_delta):
 
 #region Snake Game
 func new_game():
+	get_tree().paused = false
+	get_tree().call_group("segments", "queue_free")
+	game_over_menu.hide()
 	can_move = true
 	generate_snake()
 	move_food()
@@ -91,7 +96,7 @@ func start_game():
 	$MoveTimer.start()
 
 func end_game():
-	#$GameOverMenu.show()
+	game_over_menu.show()
 	$MoveTimer.stop()
 	game_started = false
 	get_tree().paused = true
@@ -112,8 +117,6 @@ func check_self_eaten():
 func check_food_eaten():
 	#if snake eats the food, add a segment and move the food
 	if snake_data[0] == food_pos:
-		#score += 1
-		#$Hud.get_node("ScoreLabel").text = "SCORE: " + str(score)
 		hud.score += 1
 		add_segment(old_data[-1])
 		move_food()
@@ -136,5 +139,8 @@ func move_food():
 
 func _on_move_timer_timeout() -> void:
 	move_snake()
+
+func _on_game_over_menu_restart() -> void:
+	new_game()
 
 #endregion
