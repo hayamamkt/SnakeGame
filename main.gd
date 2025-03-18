@@ -1,6 +1,7 @@
 extends Node
 
 @export var snake_scene : PackedScene
+@onready var hud: Hud = $Hud
 
 var game_started := false
 
@@ -113,6 +114,7 @@ func check_food_eaten():
 	if snake_data[0] == food_pos:
 		#score += 1
 		#$Hud.get_node("ScoreLabel").text = "SCORE: " + str(score)
+		hud.score += 1
 		add_segment(old_data[-1])
 		move_food()
 
