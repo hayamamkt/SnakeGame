@@ -13,6 +13,10 @@ var old_data : Array
 var snake_data : Array
 var snake : Array
 
+#food variables
+var food_pos: Vector2
+var regen_food := true
+
 var start_pos := Vector2(9, 9)
 var can_move := false
 var move_direction := Vector2.ZERO
@@ -27,6 +31,7 @@ func _process(_delta):
 func new_game():
 	can_move = true
 	generate_snake()
+	move_food()
 
 func generate_snake():
 	old_data.clear()
@@ -73,6 +78,7 @@ func move_snake():
 
 	check_out_of_bounds()
 	check_self_eaten()
+	check_food_eaten()
 
 func check_game_started():
 	can_move = false
@@ -101,6 +107,25 @@ func check_self_eaten():
 	for i in range(1, len(snake_data)):
 		if snake_data[0] == snake_data[i]:
 			end_game()
+
+func check_food_eaten():
+	#if snake eats the food, add a segment and move the food
+	if snake_data[0] == food_pos:
+		#score += 1
+		#$Hud.get_node("ScoreLabel").text = "SCORE: " + str(score)
+		add_segment(old_data[-1])
+		move_food()
+
+func move_food():
+	while regen_food:
+		regen_food = false
+		food_pos = Vector2(randi_range(0, cells - 1), randi_range(0, cells - 1))
+		for i in snake_data:
+			if food_pos == i:
+				regen_food = true
+	$Food.position = (food_pos * cell_size)+ Vector2(0, cell_size)
+	$Food.z_index = 1
+	regen_food = true
 
 #endregion
 
