@@ -1,7 +1,20 @@
-[gd_resource type="Theme" load_steps=2 format=3 uid="uid://btvyy77dd4ilx"]
+[gd_resource type="Theme" load_steps=3 format=3 uid="uid://btvyy77dd4ilx"]
 
 [ext_resource type="FontFile" uid="uid://c8b7fcxgk7vhb" path="res://assets/MaldiniBold.ttf" id="1_1h68f"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1h68f"]
+content_margin_left = 10.0
+content_margin_top = 19.0
+content_margin_right = 19.0
+content_margin_bottom = 19.0
+bg_color = Color(0.69, 0.58098, 0.1449, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
 [resource]
+Button/font_sizes/font_size = 40
+Button/styles/normal = SubResource("StyleBoxFlat_1h68f")
 Label/font_sizes/font_size = 40
 Label/fonts/font = ExtResource("1_1h68f")
