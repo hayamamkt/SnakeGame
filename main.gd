@@ -21,7 +21,7 @@ func _ready():
 	new_game()
 
 func _process(_delta):
-	move_snake()
+	input_snake()
 
 #region Snake Game
 func new_game():
@@ -43,7 +43,7 @@ func add_segment(pos: Vector2):
 	add_child(SnakeSegment)
 	snake.append(SnakeSegment)
 
-func move_snake():
+func input_snake():
 	if not can_move: return
 
 	if Input.is_action_just_pressed("move_down") and move_direction != Vector2.UP:
@@ -58,6 +58,21 @@ func move_snake():
 	if Input.is_action_just_pressed("move_right") and move_direction != Vector2.LEFT:
 		move_direction = Vector2.RIGHT
 		check_game_started()
+
+func move_snake():
+	#allow snake movement
+	can_move = true
+	#use the snake's previous position to move the segments
+	old_data = [] + snake_data
+	snake_data[0] += move_direction
+	for i in range(len(snake_data)):
+		#move all the segments along by one
+		if i > 0:
+			snake_data[i] = old_data[i - 1]
+		snake[i].position = (snake_data[i] * cell_size) + Vector2(0, cell_size)
+
+	check_out_of_bounds()
+	check_self_eaten()
 
 func check_game_started():
 	can_move = false
@@ -82,6 +97,10 @@ func check_out_of_bounds():
 		snake_data[0].y > cells - 1
 	): end_game()
 
+func check_self_eaten():
+	for i in range(1, len(snake_data)):
+		if snake_data[0] == snake_data[i]:
+			end_game()
 
 #endregion
 
@@ -89,16 +108,6 @@ func check_out_of_bounds():
 #region Signals
 
 func _on_move_timer_timeout() -> void:
-	#allow snake movement
-	can_move = true
-	#use the snake's previous position to move the segments
-	old_data = [] + snake_data
-	snake_data[0] += move_direction
-	for i in range(len(snake_data)):
-		#move all the segments along by one
-		if i > 0:
-			snake_data[i] = old_data[i - 1]
-		snake[i].position = (snake_data[i] * cell_size) + Vector2(0, cell_size)
+	move_snake()
 
-	check_out_of_bounds()
 #endregion
